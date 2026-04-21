@@ -6,56 +6,71 @@
 <title>Cryptogrömia Terminal</title>
 
 <style>
-    body {
-        margin: 0;
-        background-color: black;
-        color: #00ff00;
-        font-family: monospace;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-    }
+body {
+    margin: 0;
+    background: black;
+    color: #00ff00;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
 
-    header {
-        text-align: center;
-        padding: 15px;
-        border-bottom: 1px solid #00ff00;
-        font-size: 18px;
-    }
+header {
+    text-align: center;
+    padding: 15px;
+    border-bottom: 1px solid #00ff00;
+    font-size: 18px;
+}
 
-    #output {
-        flex: 1;
-        padding: 10px;
-        overflow-y: auto;
-        font-size: 16px;
-    }
+#output {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 16px;
+    white-space: pre-wrap;
+}
 
-    .input-area {
-        display: flex;
-        border-top: 1px solid #00ff00;
-    }
+.input-area {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #00ff00;
+}
 
-    input {
-        flex: 1;
-        padding: 15px;
-        background: black;
-        color: #00ff00;
-        border: none;
-        font-size: 16px;
-    }
+input {
+    padding: 15px;
+    background: black;
+    color: #00ff00;
+    border: none;
+    font-size: 16px;
+    outline: none;
+}
 
-    button {
-        background: #00ff00;
-        color: black;
-        border: none;
-        padding: 15px;
-        font-weight: bold;
-        cursor: pointer;
-    }
+.buttons {
+    display: flex;
+}
 
-    button:active {
-        background: #00cc00;
-    }
+button {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-pt {
+    background: #00ff00;
+    color: black;
+}
+
+.btn-crypto {
+    background: #003300;
+    color: #00ff00;
+}
+
+button:active {
+    opacity: 0.7;
+}
 </style>
 </head>
 
@@ -66,8 +81,12 @@
 <div id="output"></div>
 
 <div class="input-area">
-    <input type="text" id="input" placeholder="Digite aqui..." />
-    <button onclick="traduzir()">OK</button>
+    <input type="text" id="input" placeholder="Digite aqui...">
+
+    <div class="buttons">
+        <button class="btn-pt" onclick="paraCrypto()">PT → CRYPTO</button>
+        <button class="btn-crypto" onclick="paraPT()">CRYPTO → PT</button>
+    </div>
 </div>
 
 <script>
@@ -82,22 +101,6 @@ const paraPortugues = {
 const paraCrypto = {};
 for (let key in paraPortugues) {
     paraCrypto[paraPortugues[key]] = key;
-}
-
-function traduzirParaPortugues(texto) {
-    let resultado = "";
-    texto = texto.replace(/\s/g, "");
-
-    for (let i = 0; i < texto.length; i += 2) {
-        let parte = texto.substring(i, i + 2);
-        if (paraPortugues[parte]) {
-            resultado += paraPortugues[parte];
-        } else {
-            resultado += "?";
-        }
-    }
-
-    return resultado;
 }
 
 function traduzirParaCrypto(texto) {
@@ -116,27 +119,47 @@ function traduzirParaCrypto(texto) {
     return resultado;
 }
 
-function ehCrypto(texto) {
-    return /^[a-z\s]+$/.test(texto);
+function traduzirParaPortugues(texto) {
+    let resultado = "";
+    texto = texto.replace(/\s/g, "").toLowerCase();
+
+    for (let i = 0; i < texto.length; i += 2) {
+        let parte = texto.substring(i, i + 2);
+        if (paraPortugues[parte]) {
+            resultado += paraPortugues[parte];
+        } else {
+            resultado += "?";
+        }
+    }
+    return resultado;
 }
 
-function traduzir() {
+function paraCrypto() {
     let input = document.getElementById("input");
     let texto = input.value.trim();
     if (!texto) return;
 
-    let resultado = "";
+    let resultado = traduzirParaCrypto(texto);
 
-    if (ehCrypto(texto)) {
-        resultado = traduzirParaPortugues(texto.toLowerCase());
-    } else {
-        resultado = traduzirParaCrypto(texto);
-    }
+    mostrar(texto, resultado);
+}
 
+function paraPT() {
+    let input = document.getElementById("input");
+    let texto = input.value.trim();
+    if (!texto) return;
+
+    let resultado = traduzirParaPortugues(texto);
+
+    mostrar(texto, resultado);
+}
+
+function mostrar(entrada, saida) {
     let output = document.getElementById("output");
-    output.innerText += "\n> " + texto + "\n" + resultado + "\n";
 
-    input.value = "";
+    output.innerText += "\n> " + entrada + "\n" + saida + "\n";
+
+    document.getElementById("input").value = "";
     output.scrollTop = output.scrollHeight;
 }
 </script>
