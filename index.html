@@ -90,77 +90,54 @@ button:active {
 </div>
 
 <script>
-const paraPortugues = {
-    "xa":"A","br":"B","kr":"C","dr":"D","ze":"E",
-    "fx":"F","gr":"G","hx":"H","zi":"I","jx":"J",
-    "kx":"K","lx":"L","mx":"M","nx":"N","vo":"O",
-    "px":"P","qx":"Q","rx":"R","sx":"S","tx":"T",
-    "zu":"U","vx":"V","wx":"W","xx":"X","yx":"Y","zx":"Z"
-};
+function paraCrypto() {
+    const tabela = {
+        "A":"xa","B":"br","C":"kr","D":"dr","E":"ze",
+        "F":"fx","G":"gr","H":"hx","I":"zi","J":"jx",
+        "K":"kx","L":"lx","M":"mx","N":"nx","O":"vo",
+        "P":"px","Q":"qx","R":"rx","S":"sx","T":"tx",
+        "U":"zu","V":"vx","W":"wx","X":"xx","Y":"yx","Z":"zx"
+    };
 
-const paraCrypto = {};
-for (let key in paraPortugues) {
-    paraCrypto[paraPortugues[key]] = key;
-}
-
-function traduzirParaCrypto(texto) {
+    let texto = document.getElementById("input").value.toUpperCase();
     let resultado = "";
-    texto = texto.toUpperCase();
 
     for (let letra of texto) {
-        if (paraCrypto[letra]) {
-            resultado += paraCrypto[letra];
+        if (tabela[letra]) {
+            resultado += tabela[letra];
         } else if (letra === " ") {
             resultado += " ";
         } else {
             resultado += "?";
         }
     }
-    return resultado;
-}
-
-function traduzirParaPortugues(texto) {
-    let resultado = "";
-    texto = texto.replace(/\s/g, "").toLowerCase();
-
-    for (let i = 0; i < texto.length; i += 2) {
-        let parte = texto.substring(i, i + 2);
-        if (paraPortugues[parte]) {
-            resultado += paraPortugues[parte];
-        } else {
-            resultado += "?";
-        }
-    }
-    return resultado;
-}
-
-function paraCrypto() {
-    let input = document.getElementById("input");
-    let texto = input.value.trim();
-    if (!texto) return;
-
-    let resultado = traduzirParaCrypto(texto);
 
     mostrar(texto, resultado);
 }
 
 function paraPT() {
-    let input = document.getElementById("input");
-    let texto = input.value.trim();
-    if (!texto) return;
+    const tabela = {
+        "xa":"A","br":"B","kr":"C","dr":"D","ze":"E",
+        "fx":"F","gr":"G","hx":"H","zi":"I","jx":"J",
+        "kx":"K","lx":"L","mx":"M","nx":"N","vo":"O",
+        "px":"P","qx":"Q","rx":"R","sx":"S","tx":"T",
+        "zu":"U","vx":"V","wx":"W","xx":"X","yx":"Y","zx":"Z"
+    };
 
-    let resultado = traduzirParaPortugues(texto);
+    let texto = document.getElementById("input").value.toLowerCase().replace(/\s/g, "");
+    let resultado = "";
+
+    for (let i = 0; i < texto.length; i += 2) {
+        let parte = texto.substring(i, i + 2);
+        resultado += tabela[parte] || "?";
+    }
 
     mostrar(texto, resultado);
 }
 
 function mostrar(entrada, saida) {
     let output = document.getElementById("output");
-
     output.innerText += "\n> " + entrada + "\n" + saida + "\n";
-
-    document.getElementById("input").value = "";
-    output.scrollTop = output.scrollHeight;
 }
 </script>
 
