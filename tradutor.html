@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Cryptogrömia Terminal</title>
+<style>
+    body {
+        background-color: black;
+        color: #00ff00;
+        font-family: monospace;
+        padding: 20px;
+    }
+    input {
+        background: black;
+        color: #00ff00;
+        border: none;
+        outline: none;
+        font-family: monospace;
+        width: 100%;
+        font-size: 16px;
+    }
+    #output {
+        margin-top: 20px;
+        white-space: pre-wrap;
+    }
+</style>
+</head>
+<body>
+
+<h2>🕶️ Cryptogrömia Terminal</h2>
+<p>Digite texto ou código:</p>
+<input type="text" id="input" autofocus>
+
+<div id="output"></div>
+
+<script>
+const paraPortugues = {
+    "xa":"A","br":"B","kr":"C","dr":"D","ze":"E",
+    "fx":"F","gr":"G","hx":"H","zi":"I","jx":"J",
+    "kx":"K","lx":"L","mx":"M","nx":"N","vo":"O",
+    "px":"P","qx":"Q","rx":"R","sx":"S","tx":"T",
+    "zu":"U","vx":"V","wx":"W","xx":"X","yx":"Y","zx":"Z"
+};
+
+// cria reverso automaticamente
+const paraCrypto = {};
+for (let key in paraPortugues) {
+    paraCrypto[paraPortugues[key]] = key;
+}
+
+function traduzirParaPortugues(texto) {
+    let resultado = "";
+    for (let i = 0; i < texto.length; i += 2) {
+        let parte = texto.substring(i, i + 2);
+        resultado += paraPortugues[parte] || "?";
+    }
+    return resultado;
+}
+
+function traduzirParaCrypto(texto) {
+    let resultado = "";
+    texto = texto.toUpperCase();
+
+    for (let letra of texto) {
+        if (paraCrypto[letra]) {
+            resultado += paraCrypto[letra];
+        } else if (letra === " ") {
+            resultado += " ";
+        } else {
+            resultado += "?";
+        }
+    }
+    return resultado;
+}
+
+// detecta automaticamente
+function ehCrypto(texto) {
+    return /^[a-z]+$/.test(texto) && texto.length % 2 === 0;
+}
+
+document.getElementById("input").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+        let texto = this.value.trim();
+        let resultado = "";
+
+        if (ehCrypto(texto)) {
+            resultado = traduzirParaPortugues(texto.toLowerCase());
+        } else {
+            resultado = traduzirParaCrypto(texto);
+        }
+
+        document.getElementById("output").innerText += 
+            "\n> " + texto + "\n" + resultado + "\n";
+
+        this.value = "";
+    }
+});
+</script>
+
+</body>
+</html>
