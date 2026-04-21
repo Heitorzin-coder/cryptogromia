@@ -86,10 +86,17 @@ for (let key in paraPortugues) {
 
 function traduzirParaPortugues(texto) {
     let resultado = "";
+    texto = texto.replace(/\s/g, "");
+
     for (let i = 0; i < texto.length; i += 2) {
         let parte = texto.substring(i, i + 2);
-        resultado += paraPortugues[parte] || "?";
+        if (paraPortugues[parte]) {
+            resultado += paraPortugues[parte];
+        } else {
+            resultado += "?";
+        }
     }
+
     return resultado;
 }
 
@@ -110,7 +117,7 @@ function traduzirParaCrypto(texto) {
 }
 
 function ehCrypto(texto) {
-    return /^[a-z]+$/.test(texto) && texto.length % 2 === 0;
+    return /^[a-z\s]+$/.test(texto);
 }
 
 function traduzir() {
