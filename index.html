@@ -2,36 +2,73 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cryptogrömia Terminal</title>
+
 <style>
     body {
+        margin: 0;
         background-color: black;
         color: #00ff00;
         font-family: monospace;
-        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
     }
+
+    header {
+        text-align: center;
+        padding: 15px;
+        border-bottom: 1px solid #00ff00;
+        font-size: 18px;
+    }
+
+    #output {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        font-size: 16px;
+    }
+
+    .input-area {
+        display: flex;
+        border-top: 1px solid #00ff00;
+    }
+
     input {
+        flex: 1;
+        padding: 15px;
         background: black;
         color: #00ff00;
         border: none;
-        outline: none;
-        font-family: monospace;
-        width: 100%;
         font-size: 16px;
     }
-    #output {
-        margin-top: 20px;
-        white-space: pre-wrap;
+
+    button {
+        background: #00ff00;
+        color: black;
+        border: none;
+        padding: 15px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:active {
+        background: #00cc00;
     }
 </style>
 </head>
+
 <body>
 
-<h2>🕶️ Cryptogrömia Terminal</h2>
-<p>Digite texto ou código:</p>
-<input type="text" id="input" autofocus>
+<header>🕶️ Cryptogrömia Terminal</header>
 
 <div id="output"></div>
+
+<div class="input-area">
+    <input type="text" id="input" placeholder="Digite aqui..." />
+    <button onclick="traduzir()">OK</button>
+</div>
 
 <script>
 const paraPortugues = {
@@ -42,7 +79,6 @@ const paraPortugues = {
     "zu":"U","vx":"V","wx":"W","xx":"X","yx":"Y","zx":"Z"
 };
 
-// cria reverso automaticamente
 const paraCrypto = {};
 for (let key in paraPortugues) {
     paraCrypto[paraPortugues[key]] = key;
@@ -73,28 +109,29 @@ function traduzirParaCrypto(texto) {
     return resultado;
 }
 
-// detecta automaticamente
 function ehCrypto(texto) {
     return /^[a-z]+$/.test(texto) && texto.length % 2 === 0;
 }
 
-document.getElementById("input").addEventListener("keydown", function(e) {
-    if (e.key === "Enter") {
-        let texto = this.value.trim();
-        let resultado = "";
+function traduzir() {
+    let input = document.getElementById("input");
+    let texto = input.value.trim();
+    if (!texto) return;
 
-        if (ehCrypto(texto)) {
-            resultado = traduzirParaPortugues(texto.toLowerCase());
-        } else {
-            resultado = traduzirParaCrypto(texto);
-        }
+    let resultado = "";
 
-        document.getElementById("output").innerText += 
-            "\n> " + texto + "\n" + resultado + "\n";
-
-        this.value = "";
+    if (ehCrypto(texto)) {
+        resultado = traduzirParaPortugues(texto.toLowerCase());
+    } else {
+        resultado = traduzirParaCrypto(texto);
     }
-});
+
+    let output = document.getElementById("output");
+    output.innerText += "\n> " + texto + "\n" + resultado + "\n";
+
+    input.value = "";
+    output.scrollTop = output.scrollHeight;
+}
 </script>
 
 </body>
